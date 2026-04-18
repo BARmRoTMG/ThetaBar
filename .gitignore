@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Airflow generated state/logs
+airflow/logs/
+airflow/*.db
+
+# Local env files
+.env
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Jenkins local state
+# Uncomment if you do NOT want Jenkins data in git
+# jenkins_home/
+
+# Docker overrides
+docker-compose.override.yml
