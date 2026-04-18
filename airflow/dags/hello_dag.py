@@ -13,6 +13,6 @@ with DAG(
 ) as dag:
 
     task = PythonOperator(
-        task_id="hello_task",
+        task_id="hello",
         python_callable=hello,
     )
