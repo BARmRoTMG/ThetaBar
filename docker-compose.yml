@@ -168,6 +168,15 @@ services:
       JWT_SECRET: local-dev-ic-secret-change-later
       JWT_EXPIRE_MINUTES: 720
 
+  ic-frontend:
+    build: ./ic-frontend
+    container_name: lab-ic-frontend
+    restart: unless-stopped
+    depends_on:
+      - ic-backend
+    ports:
+      - "5173:5173"
+
 volumes:
   postgres_data:
   jenkins_home:
