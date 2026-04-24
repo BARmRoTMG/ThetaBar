@@ -24,6 +24,8 @@ services:
       - "5050:80"
     depends_on:
       - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
   redis:
     image: redis:7
@@ -137,6 +139,36 @@ services:
     environment:
       JUPYTER_TOKEN: admin
 
+  alert-simulator:
+    build: ./simulator
+    container_name: thetabar-alert-simulator
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_NAME: app_db
+      DB_USER: admin
+      DB_PASSWORD: admin
+      SLEEP_SECONDS: 30
+
+  ic-backend:
+    build: ./backend
+    container_name: lab-ic-backend
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: postgres
+      DB_NAME: app_db
+      DB_USER: admin
+      DB_PASSWORD: admin
+      JWT_SECRET: local-dev-ic-secret-change-later
+      JWT_EXPIRE_MINUTES: 720
+
 volumes:
   postgres_data:
   jenkins_home:
+  pgadmin_data:
