@@ -21,5 +21,6 @@ CREATE TABLE IF NOT EXISTS daily_alerts (
         summary TEXT NOT NULL,
         amount NUMERIC(12,2) NOT NULL,
         country VARCHAR(50) NOT NULL,
-        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status VARCHAR(20) DEFAULT 'new'
 );

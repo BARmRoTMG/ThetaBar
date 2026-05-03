@@ -23,6 +23,12 @@ export async function fetchMe(token) {
   return res.json();
 }
 
+export async function fetchUsers(token) {
+  const res = await fetch(`${API_BASE}/users`, { headers: headers(token) });
+  if (!res.ok) throw new Error("Failed to load users");
+  return res.json();
+}
+
 const QUEUE_ENDPOINT = {
   unassigned: "/alerts/unassigned",
   mine: "/alerts/mine",
@@ -37,13 +43,22 @@ export async function fetchAlerts(token, queue) {
   return res.json();
 }
 
-export async function assignAlert(token, dailyAlertId) {
+export async function assignAlert(token, dailyAlertId, userId = null) {
   const res = await fetch(`${API_BASE}/alerts/assign`, {
     method: "POST",
     headers: headers(token),
-    body: JSON.stringify({ daily_alert_id: dailyAlertId }),
+    body: JSON.stringify({ daily_alert_id: dailyAlertId, user_id: userId }),
   });
-  if (!res.ok) throw new Error("Alert already assigned or unavailable");
+  if (!res.ok) throw new Error("Failed to assign alert");
+  return res.json();
+}
+
+export async function closeAlert(token, alertId) {
+  const res = await fetch(`${API_BASE}/alerts/${alertId}/close`, {
+    method: "POST",
+    headers: headers(token),
+  });
+  if (!res.ok) throw new Error("Failed to close alert");
   return res.json();
 }
 
