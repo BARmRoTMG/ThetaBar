@@ -1,20 +1,34 @@
-import { Inbox, FolderOpen } from "lucide-react";
+import { Archive, FolderOpen, Inbox } from "lucide-react";
 import "./EmptyState.css";
 
+const CONFIG = {
+  mine: {
+    icon: Inbox,
+    heading: "No alerts assigned to you",
+    body: "Use Get Next Alert in the toolbar to receive your next alert.",
+  },
+  closed: {
+    icon: Archive,
+    heading: "No closed alerts yet",
+    body: "Alerts that have been closed will appear here.",
+  },
+  default: {
+    icon: FolderOpen,
+    heading: "No alerts in this queue",
+    body: "There are no alerts here right now. Check back later.",
+  },
+};
+
 export default function EmptyState({ queue }) {
-  const isMine = queue === "mine";
+  const { icon: Icon, heading, body } = CONFIG[queue] ?? CONFIG.default;
 
   return (
     <div className="empty-state">
       <div className="empty-icon">
-        {isMine ? <Inbox size={46} /> : <FolderOpen size={46} />}
+        <Icon size={46} />
       </div>
-      <h2>{isMine ? "No alerts assigned to you" : "No alerts in this queue"}</h2>
-      <p>
-        {isMine
-          ? "Use Get Next Alert in the toolbar to receive your next alert."
-          : "There are no alerts here right now. Check back later."}
-      </p>
+      <h2>{heading}</h2>
+      <p>{body}</p>
     </div>
   );
 }

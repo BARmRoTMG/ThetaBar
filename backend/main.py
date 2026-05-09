@@ -205,6 +205,11 @@ def get_all_alerts(current_user: dict = Depends(get_current_user)):
     return fetch_alerts("")
 
 
+@app.get("/alerts/closed")
+def get_closed_alerts(current_user: dict = Depends(get_current_user)):
+    return fetch_alerts("WHERE da.status = 'closed'")
+
+
 @app.post("/alerts/assign")
 def assign_alert(payload: AssignRequest, current_user: dict = Depends(get_current_user)):
     # Analysts may only assign to themselves regardless of payload

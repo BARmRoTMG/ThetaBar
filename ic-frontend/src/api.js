@@ -33,6 +33,7 @@ const QUEUE_ENDPOINT = {
   unassigned: "/alerts/unassigned",
   mine: "/alerts/mine",
   all: "/alerts/all",
+  closed: "/alerts/closed",
 };
 
 export async function fetchAlerts(token, queue) {

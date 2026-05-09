@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Files, FolderOpen, Inbox } from "lucide-react";
+import { Archive, Files, FolderOpen, Inbox } from "lucide-react";
 import LoginPage from "./components/LoginPage";
 import Topbar from "./components/Topbar";
 import Sidebar from "./components/Sidebar";
@@ -21,6 +21,7 @@ const VIEWS = [
   { id: "unassigned", label: "Unassigned", icon: Inbox },
   { id: "mine", label: "Assigned to Me", icon: FolderOpen },
   { id: "all", label: "All Alerts", icon: Files },
+  { id: "closed", label: "Closed Alerts", icon: Archive },
 ];
 
 export default function App() {
