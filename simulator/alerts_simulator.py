@@ -11,7 +11,7 @@ DB_HOST = os.getenv("DB_HOST", "postgres")
 DB_NAME = os.getenv("DB_NAME", "app_db")
 DB_USER = os.getenv("DB_USER", "admin")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "admin")
-SLEEP_SECONDS = int(os.getenv("SLEEP_SECONDS", "30"))
+SLEEP_SECONDS = int(os.getenv("SLEEP_SECONDS", "60"))
 
 RISK_LEVELS = ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
 COUNTRIES = ["Israel", "UK", "USA", "Germany", "Spain", "France", "Brazil"]

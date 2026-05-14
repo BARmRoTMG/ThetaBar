@@ -5,6 +5,7 @@ import logging
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from utils.loggin_to_db import upload_airflow_logs_to_db
 
 DB_CONFIG = {
     "host": "postgres",
@@ -192,4 +193,6 @@ with DAG(
     upload_task = PythonOperator(
         task_id="upload_daily_alerts_task",
         python_callable=upload_daily_alerts,
+        on_success_callback=upload_airflow_logs_to_db,
+        on_failure_callback=upload_airflow_logs_to_db,
     )

@@ -11,6 +11,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from prometheus_fastapi_instrumentator import Instrumentator
 
 
 DB_CONFIG = {
@@ -62,6 +63,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Investigation Center API", lifespan=lifespan)
+Instrumentator().instrument(app).expose(app)
 
 app.add_middleware(
     CORSMiddleware,
