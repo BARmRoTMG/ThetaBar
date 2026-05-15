@@ -1,3 +1,4 @@
+import logging
 import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta, timezone
@@ -5,13 +6,21 @@ from typing import Optional
 
 import psycopg2
 import psycopg2.extras
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from prometheus_fastapi_instrumentator import Instrumentator
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%S",
+)
+logger = logging.getLogger("ic-backend")
+fe_logger = logging.getLogger("ic-frontend")
 
 
 DB_CONFIG = {
@@ -86,6 +95,13 @@ class AssignRequest(BaseModel):
     user_id: Optional[int] = None  # None → assign to current user
 
 
+class FrontendLogRequest(BaseModel):
+    level: str        # "info" | "warn" | "error"
+    message: str
+    source: Optional[str] = "frontend"
+    details: Optional[str] = None
+
+
 # ── Auth helpers ───────────────────────────────────────────────────────────────
 
 def verify_password(plain: str, hashed: str) -> bool:
@@ -158,6 +174,23 @@ def fetch_alerts(where_clause: str, params: tuple = ()):
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.post("/frontend-logs")
+async def frontend_log(payload: FrontendLogRequest, request: Request):
+    origin = request.headers.get("referer", "unknown")
+    log_fn = {
+        "error": fe_logger.error,
+        "warn":  fe_logger.warning,
+        "info":  fe_logger.info,
+    }.get(payload.level, fe_logger.info)
+
+    if payload.details:
+        log_fn("[%s] %s | %s | origin=%s", payload.source, payload.message, payload.details, origin)
+    else:
+        log_fn("[%s] %s | origin=%s", payload.source, payload.message, origin)
+
+    return {"ok": True}
 
 
 @app.post("/login")
